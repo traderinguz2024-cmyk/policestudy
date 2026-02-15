@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta name="x-poe-datastore-behavior" content="local_only">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jinoyat Tergovi Trenajyori | IIB</title>
+  <style>
+    :root {
+      --bg0: #f5f7fb;
+      --bg1: #eef2f7;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: rgba(15, 23, 42, 0.12);
+      --shadow: 0 10px 30px rgba(2, 6, 23, 0.08);
+
+      --navy0: #0b2d5c;
+      --navy1: #134a8a;
+      --accent: #1d4ed8;
+      --accentSoft: rgba(29, 78, 216, 0.12);
+
+      --ok: #16a34a;
+      --okSoft: rgba(22, 163, 74, 0.12);
+      --warn: #b45309;
+      --warnSoft: rgba(180, 83, 9, 0.12);
+
+      --radius: 16px;
+      --gate: 76;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        radial-gradient(900px 500px at 15% 10%, rgba(19, 74, 138, 0.10), transparent 55%),
+        radial-gradient(700px 450px at 85% 25%, rgba(29, 78, 216, 0.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      min-height: 100vh;
+      padding: 20px;
+      color: var(--text);
+    }
+
+    .container { max-width: 1400px; margin: 0 auto; }
+
+    .header {
+      background: linear-gradient(135deg, var(--navy0), var(--navy1));
+      color: #fff;
+      padding: 22px 26px;
+      border-radius: var(--radius);
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.16);
+    }
+
+    .header h1 {
+      font-size: 1.55em;
+      text-align: center;
+      margin-bottom: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .meta-pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.16);
+      font-weight: 800;
+      color: rgba(255,255,255,0.92);
+      backdrop-filter: blur(6px);
+      line-height: 1.1;
+      text-align: center;
+    }
+
+    .score-board {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .score-item {
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 14px;
+      padding: 12px 14px;
+      text-align: center;
+      backdrop-filter: blur(6px);
+    }
+
+    .score-label { font-size: 0.85em; color: rgba(255,255,255,0.82); margin-bottom: 6px; }
+    .score-value { font-size: 1.6em; font-weight: 800; color: #ffffff; }
+
+    .top-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease;
+      user-select: none;
+    }
+    .btn:hover { transform: translateY(-1px); background: rgba(255,255,255,0.16); }
+    .btn.primary {
+      background: #fff;
+      color: var(--navy0);
+      border-color: rgba(255,255,255,0.6);
+    }
+    .btn.primary:hover { background: rgba(255,255,255,0.92); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    .game-area {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .panel {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .panel-title {
+      font-size: 1.05em;
+      font-weight: 800;
+      color: var(--navy0);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .chip {
+      font-size: 0.85em;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--accentSoft);
+      border: 1px solid rgba(29, 78, 216, 0.18);
+      color: var(--navy0);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .steps-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .step {
+      width: 48px;
+      height: 48px;
+      border-radius: 999px;
+      background: #fff;
+      border: 2px solid rgba(11, 45, 92, 0.18);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.05em;
+      font-weight: 800;
+      color: rgba(11, 45, 92, 0.65);
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .step.active {
+      border-color: rgba(29, 78, 216, 0.55);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.12), rgba(19, 74, 138, 0.08));
+      color: var(--navy0);
+      transform: scale(1.05);
+    }
+
+    .step.completed {
+      border-color: rgba(22, 163, 74, 0.55);
+      background: var(--okSoft);
+      color: #14532d;
+    }
+
+    .step.locked {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+      border-style: dashed;
+    }
+
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: rgba(11, 45, 92, 0.14);
+      min-width: 40px;
+    }
+    .step-line.completed { background: rgba(22, 163, 74, 0.45); }
+
+    .main-actions {
+      padding: 0 18px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .main-action-card {
+      padding: 14px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #fff;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+      cursor: pointer;
+    }
+
+    .main-action-card:hover {
+      transform: translateY(-1px);
+      border-color: rgba(29, 78, 216, 0.28);
+      box-shadow: 0 12px 26px rgba(2, 6, 23, 0.08);
+    }
+
+    .main-action-card.active {
+      border-color: rgba(29, 78, 216, 0.45);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.10), rgba(255,255,255,1));
+    }
+
+    .main-action-card.completed {
+      border-color: rgba(22, 163, 74, 0.22);
+      background: linear-gradient(135deg, rgba(22, 163, 74, 0.08), #fff);
+    }
+
+    .main-action-card.locked {
+      opacity: 0.55;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .main-action-card.locked:hover { transform: none; border-color: var(--border); }
+
+    .main-action-title { font-size: 1.02em; font-weight: 800; color: var(--navy0); margin-bottom: 6px; }
+    .main-action-desc { font-size: 0.93em; color: var(--muted); line-height: 1.4; }
+
+    .sub-content { padding: 18px; }
+
+    .current-step-info {
+      padding: 14px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(29, 78, 216, 0.18);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.10), rgba(255,255,255,1));
+      color: var(--navy0);
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .sub-actions-grid { display: grid; gap: 12px; }
+
+    .sub-action-row {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      background: #fff;
+      transition: opacity 0.15s ease;
+    }
+
+    .sub-action-row.locked {
+      opacity: 0.55;
+    }
+
+    .sub-action-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .sub-action-text { font-size: 0.98em; color: var(--text); line-height: 1.5; font-weight: 650; }
+    .sub-action-percent { font-weight: 900; color: var(--navy0); white-space: nowrap; min-width: 64px; text-align: right; }
+
+    .range-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 6px 0;
+      touch-action: pan-x;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    input[type="range"] {
+      flex: 1 1 auto;
+      min-width: 120px;
+      height: 10px;
+      accent-color: var(--accent);
+      background: rgba(29, 78, 216, 0.15);
+      border-radius: 999px;
+      outline: none;
+      pointer-events: auto !important;
+      touch-action: pan-x !important;
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      cursor: grab;
+      pointer-events: auto;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      transform: scale(1.15);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      cursor: grab;
+    }
+
+    input[type="range"]:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .num-input {
+      width: 84px;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-weight: 800;
+      color: var(--navy0);
+      background: #fff;
+      text-align: center;
+    }
+
+    .hint { margin-top: 8px; color: var(--muted); font-size: 0.88em; }
+
+    .summary {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(11, 45, 92, 0.14);
+      background: linear-gradient(135deg, rgba(11, 45, 92, 0.06), rgba(255,255,255,1));
+      display: grid;
+      gap: 10px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .progressbar {
+      height: 10px;
+      background: rgba(11, 45, 92, 0.12);
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid rgba(11, 45, 92, 0.10);
+    }
+
+    .progressbar > div {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--navy0), var(--accent));
+      border-radius: 999px;
+      transition: width 0.15s ease;
+    }
+
+    .lock-note {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(180, 83, 9, 0.22);
+      background: var(--warnSoft);
+      color: #7c2d12;
+      font-weight: 750;
+      display: none;
+    }
+    .lock-note.show { display: block; }
+
+    .completion-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.70);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+    .completion-modal.show { display: flex; }
+
+    .completion-content {
+      width: min(720px, 100%);
+      background: var(--card);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 25px 70px rgba(2, 6, 23, 0.30);
+      overflow: hidden;
+    }
+
+    .completion-head {
+      background: linear-gradient(135deg, var(--navy0), var(--navy1));
+      color: #fff;
+      padding: 18px 20px;
+    }
+
+    .completion-title { font-size: 1.6em; font-weight: 900; margin-bottom: 4px; }
+    .completion-body { padding: 18px 20px; }
+
+    .final-score {
+      font-size: 3.2em;
+      color: var(--navy0);
+      font-weight: 950;
+      margin: 14px 0 10px 0;
+    }
+
+    .completion-stats {
+      margin: 14px 0;
+      padding: 14px;
+      background: rgba(15, 23, 42, 0.03);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      gap: 12px;
+    }
+    .stat-row:last-child { border-bottom: none; }
+
+    .restart-btn {
+      background: linear-gradient(135deg, var(--navy0), var(--navy1));
+      color: #fff;
+      border: none;
+      padding: 12px 18px;
+      font-size: 1.05em;
+      font-weight: 850;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+    .restart-btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+
+    @media (max-width: 1024px) {
+      .game-area { grid-template-columns: 1fr; }
+      .step-line { display: none; }
+      .score-board { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .header h1 { font-size: 1.15em; }
+      .score-board { grid-template-columns: 1fr; }
+      .steps-container { justify-content: center; }
+      .range-wrap { flex-direction: column; align-items: stretch; gap: 8px; }
+      .num-input { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>⚖️ Jinoyat Tergovi Trenajyori - Kiber Jinoyatlar Bo'limi</h1>
+
+      <div class="meta-row" aria-label="Kursant va Fabula ma'lumotlari">
+        <div class="meta-pill" id="traineeLabel">132-guruh kursanti Narzullayev Bekmurod</div>
+        <div class="meta-pill" id="fabulaLabel">17-Fabula</div>
+      </div>
+
+      <div class="score-board">
+        <div class="score-item">
+          <div class="score-label">Umumiy ball (0–100)</div>
+          <div class="score-value" id="currentScore">0</div>
+        </div>
+        <div class="score-item">
+          <div class="score-label">Joriy bosqich</div>
+          <div class="score-value" id="currentStep">1</div>
+        </div>
+        <div class="score-item">
+          <div class="score-label">To'ldirilgan kichik harakatlar</div>
+          <div class="score-value" id="filledCount">0</div>
+        </div>
+        <div class="score-item">
+          <div class="score-label">Jami kichik harakatlar</div>
+          <div class="score-value" id="totalCount">0</div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="btn primary" id="finishBtn" type="button">Yakunlash (hisobot)</button>
+        <button class="btn" id="restartBtn" type="button">Qayta boshlash</button>
+      </div>
+    </div>
+
+    <div class="game-area">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">🎯 Asosiy harakatlar</div>
+          <div class="chip" id="leftChip">Bosqich tanlang</div>
+        </div>
+
+        <div class="steps-container" id="stepsContainer">
+          <div class="step active" data-step="1" title="1-bosqich">1</div>
+          <div class="step-line"></div>
+          <div class="step" data-step="2" title="2-bosqich">2</div>
+          <div class="step-line"></div>
+          <div class="step" data-step="3" title="3-bosqich">3</div>
+          <div class="step-line"></div>
+          <div class="step" data-step="4" title="4-bosqich">4</div>
+          <div class="step-line"></div>
+          <div class="step" data-step="5" title="5-bosqich">5</div>
+        </div>
+
+        <div class="main-actions" id="mainActions"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">📋 Kichik harakatlar</div>
+          <div class="chip" id="stepAvgChip">Bosqich: 0%</div>
+        </div>
+
+        <div class="sub-content">
+          <div class="current-step-info" id="currentStepInfo">Bosqich tanlang</div>
+
+          <div class="sub-actions-grid" id="subActionsGrid"></div>
+
+          <div class="lock-note" id="lockNote"></div>
+
+          <div class="summary">
+            <div class="summary-row">
+              <div style="font-weight:900;color:var(--navy0);">Umumiy bajarilganlik</div>
+              <div class="chip" id="totalChip">0 / 100</div>
+            </div>
+            <div class="progressbar" aria-label="Umumiy progress">
+              <div id="totalBar"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="completion-modal" id="completionModal" role="dialog" aria-modal="true">
+    <div class="completion-content">
+      <div class="completion-head">
+        <div class="completion-title">Hisobot</div>
+        <div>Yakuniy natijalar (100 ballik tizim)</div>
+      </div>
+      <div class="completion-body">
+        <div class="final-score" id="finalScore">0 / 100</div>
+
+        <div class="completion-stats">
+          <div class="stat-row">
+            <span>To'ldirilgan kichik harakatlar:</span>
+            <span id="finalFilled">0</span>
+          </div>
+          <div class="stat-row">
+            <span>Jami kichik harakatlar:</span>
+            <span id="finalTotal">0</span>
+          </div>
+          <div class="stat-row">
+            <span>Umumiy foiz:</span>
+            <span id="finalPercent">0%</span>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <button class="restart-btn" id="closeModalBtn" type="button">Yopish</button>
+          <button class="restart-btn" id="restartBtn2" type="button">Qayta boshlash</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PASS_GATE = 76;
+
+    const gameData = {
+      currentStep: 1,
+      steps: [
+        {
+          id: 1,
+          title: "1. Ariza (bayonot) tushadi",
+          description: "Fuqaro tomonidan kiber jinoyat bo'yicha ariza qabul qilish",
+          subActions: [
+            { text: "Arizani qabul qilish (yozma yoki og‘zaki)" },
+            { text: "Og‘zaki arizani bayonnoma shaklida rasmiylashtirish" },
+            { text: "Arizachining shaxsini aniqlash" },
+            { text: "Arizani maxsus ro‘yxatga olish jurnaliga kiritish" },
+            { text: "Jinoyat haqida xabarni Yagona reyestrga kiritish (agar tizim mavjud bo‘lsa)" }
+          ]
+        },
+        {
+          id: 2,
+          title: "2. Dastlabki tekshiruv",
+          description: "Ariza bo'yicha dastlabki tekshiruv ishlari olib borish",
+          subActions: [
+            { text: "Hodisa joyini ko‘zdan kechirish" },
+            { text: "Tushuntirishlar olish (so‘roq emas, tushuntirish)" },
+            { text: "Videokuzatuv yozuvlarini olish" },
+            { text: "Dastlabki ekspert tekshiruvlari" },
+            { text: "Shaxsni aniqlash choralarini ko‘rish" }
+          ]
+        },
+        {
+          id: 3,
+          title: "3. Operativ-qidiruv choralar (OQC)",
+          description: "Jinoyatchi va dalillarni qidirish bo'yicha maxsus tadbirlar",
+          subActions: [
+            { text: "Tezkor kuzatuv" },
+            { text: "Gumondorning telefonini tinglash (sud qarorisiz)" },
+            { text: "Operativ ma’lumot to‘plash" },
+            { text: "Axborot bazalarini tekshirish" },
+            { text: "Tezkor so‘rovlar yuborish" }
+          ]
+        },
+        {
+          id: 4,
+          title: "4. Nizomiylik choralari",
+          description: "Jinoyat ishini qo'zg'atish va huquqiy rasmiylashtirish",
+          subActions: [
+            { text: "Ushlab turish (72 soatgacha)" },
+            { text: "Majburiy olib kelish" },
+            { text: "Tintuv o‘tkazish" },
+            { text: "Olib qo‘yish" },
+            { text: "Tergovga jalb etish qarorini rasmiylashtirish" }
+          ]
+        },
+        {
+          id: 5,
+          title: "5. Dalillarni rasmiylashtirish",
+          description: "Yig'ilgan dalillarni qonuniy tartibda rasmiylashtirish",
+          subActions: [
+            { text: "Raqamli dalillarning xesh-summalarini hisoblash" },
+            { text: "So‘roq qilish (guvoh, jabrlanuvchi, gumonlanuvchi)" },
+            { text: "Texnik ekspertiza natijalarini ilova qilish" },
+            { text: "Protokollar tuzish" },
+            { text: "Qaror chiqarish" }
+          ]
+        }
+      ]
+    };
+
+    const progressStore = new Map();
+
+    function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+    function isNum(v) { return typeof v === "number" && !Number.isNaN(v); }
+
+    function getAllSubActionKeys() {
+      const keys = [];
+      gameData.steps.forEach(step => step.subActions.forEach((_, idx) => keys.push(`${step.id}:${idx}`)));
+      return keys;
+    }
+
+    function computeTotals() {
+      const keys = getAllSubActionKeys();
+      const values = keys.map(k => progressStore.get(k)).filter(isNum);
+      const totalCount = keys.length;
+      const filledCount = values.length;
+      const avg = values.length ? (values.reduce((a, b) => a + b, 0) / values.length) : 0;
+      const finalScore = clamp(avg, 0, 100);
+      return { totalCount, filledCount, finalScore };
+    }
+
+    function computeStepAvg(stepId) {
+      const step = gameData.steps.find(s => s.id === stepId);
+      const values = step.subActions
+        .map((_, idx) => progressStore.get(`${stepId}:${idx}`))
+        .filter(isNum);
+      const avg = values.length ? (values.reduce((a, b) => a + b, 0) / values.length) : 0;
+      return clamp(avg, 0, 100);
+    }
+
+    function isStepUnlocked(stepId) {
+      if (stepId === 1) return true;
+      const prevAvg = computeStepAvg(stepId - 1);
+      return prevAvg >= PASS_GATE;
+    }
+
+    function canUnlockSub(stepId, subIndex) {
+      if (subIndex === 0) return true;
+      const prevVal = progressStore.get(`${stepId}:${subIndex - 1}`);
+      return isNum(prevVal) && prevVal >= PASS_GATE;
+    }
+
+    function setLockNote(msg) {
+      const el = document.getElementById("lockNote");
+      if (!msg) { el.classList.remove("show"); el.textContent = ""; return; }
+      el.textContent = msg;
+      el.classList.add("show");
+    }
+
+    function updateHeaderScore() {
+      const { totalCount, filledCount, finalScore } = computeTotals();
+      document.getElementById("currentScore").textContent = Math.round(finalScore);
+      document.getElementById("currentStep").textContent = gameData.currentStep;
+      document.getElementById("filledCount").textContent = filledCount;
+      document.getElementById("totalCount").textContent = totalCount;
+
+      document.getElementById("totalChip").textContent = `${Math.round(finalScore)} / 100`;
+      document.getElementById("totalBar").style.width = `${finalScore}%`;
+
+      const stepAvg = computeStepAvg(gameData.currentStep);
+      document.getElementById("stepAvgChip").textContent = `Bosqich: ${Math.round(stepAvg)}%`;
+
+      const currentStepData = gameData.steps[gameData.currentStep - 1];
+      document.getElementById("leftChip").textContent = currentStepData ? `Tanlangan: ${currentStepData.id}-bosqich` : "Bosqich tanlang";
+    }
+
+    function updateStepIndicators() {
+      document.querySelectorAll(".step").forEach((el) => {
+        const n = Number(el.dataset.step);
+        el.classList.remove("active", "completed", "locked");
+
+        const unlocked = isStepUnlocked(n);
+        if (!unlocked) el.classList.add("locked");
+
+        if (n === gameData.currentStep) el.classList.add("active");
+        else {
+          const avg = computeStepAvg(n);
+          if (avg >= PASS_GATE) el.classList.add("completed");
+        }
+
+        el.setAttribute("aria-disabled", unlocked ? "false" : "true");
+      });
+
+      document.querySelectorAll(".step-line").forEach((line, index) => {
+        const n = index + 1;
+        line.classList.remove("completed");
+        const avg = computeStepAvg(n);
+        if (avg >= PASS_GATE) line.classList.add("completed");
+      });
+    }
+
+    function renderMainActions() {
+      const container = document.getElementById("mainActions");
+      container.innerHTML = "";
+
+      gameData.steps.forEach(step => {
+        const card = document.createElement("div");
+        card.className = "main-action-card";
+
+        const unlocked = isStepUnlocked(step.id);
+        if (!unlocked) card.classList.add("locked");
+
+        if (step.id === gameData.currentStep) card.classList.add("active");
+
+        const stepAvg = computeStepAvg(step.id);
+        if (stepAvg >= PASS_GATE) card.classList.add("completed");
+
+        const statusText = unlocked
+          ? (stepAvg >= PASS_GATE ? `O‘tildi (≥ ${PASS_GATE}%)` : `Shart: o‘rtacha ≥ ${PASS_GATE}%`)
+          : `Yopiq: ${step.id - 1}-bosqich o‘rtachasi ≥ ${PASS_GATE}% bo‘lsin`;
+
+        card.innerHTML = `
+          <div class="main-action-title">${step.title}</div>
+          <div class="main-action-desc">${step.description}</div>
+          <div class="hint" style="margin-top:10px;">
+            Bosqich bajarilganlik: <b>${Math.round(stepAvg)}%</b> · <span>${statusText}</span>
+          </div>
+        `;
+
+        card.addEventListener("click", () => {
+          if (!unlocked) {
+            setLockNote(`${step.id}-bosqich yopiq. Avval ${step.id - 1}-bosqich o‘rtachasini ${PASS_GATE}% ga yetkazing.`);
+            return;
+          }
+          setLockNote("");
+          gameData.currentStep = step.id;
+          updateStepIndicators();
+          renderMainActions();
+          renderSubActions();
+          updateHeaderScore();
+        });
+
+        container.appendChild(card);
+      });
+    }
+
+    function renderSubActions() {
+      const container = document.getElementById("subActionsGrid");
+      const currentStepData = gameData.steps[gameData.currentStep - 1];
+
+      document.getElementById("currentStepInfo").textContent = `Joriy bosqich: ${currentStepData.title}`;
+      container.innerHTML = "";
+
+      const stepUnlocked = isStepUnlocked(currentStepData.id);
+      if (!stepUnlocked) {
+        setLockNote(`Bu bosqich yopiq. Avval ${currentStepData.id - 1}-bosqich o‘rtachasini ${PASS_GATE}% ga yetkazing.`);
+      } else {
+        setLockNote("");
+      }
+
+      currentStepData.subActions.forEach((action, index) => {
+        const key = `${currentStepData.id}:${index}`;
+        const existing = progressStore.get(key);
+        const val = isNum(existing) ? existing : 0;
+
+        const unlocked = stepUnlocked && canUnlockSub(currentStepData.id, index);
+
+        const row = document.createElement("div");
+        row.className = "sub-action-row";
+        if (!unlocked) row.classList.add("locked");
+
+        const pctId = `pct_${key.replace(":","_")}`;
+        const rngId = `rng_${key.replace(":","_")}`;
+        const numId = `num_${key.replace(":","_")}`;
+
+        const lockHint = (!stepUnlocked)
+          ? `Bosqich yopiq`
+          : (index === 0 ? "" : `Yopiq: avvalgi harakat ≥ ${PASS_GATE}% bo‘lsin`);
+
+        row.innerHTML = `
+          <div class="sub-action-top">
+            <div class="sub-action-text">${action.text}</div>
+            <div class="sub-action-percent" id="${pctId}">${Math.round(val)}%</div>
+          </div>
+
+          <div class="range-wrap">
+            <input type="range" min="0" max="100" step="1" value="${Math.round(val)}"
+              aria-label="Bajarilganlik foizi" id="${rngId}" ${unlocked ? "" : "disabled"} />
+            <input type="number" min="0" max="100"  class="num-input" value="${Math.round(val)}"
+              aria-label="Foiz (0-100)" id="${numId}" ${unlocked ? "" : "disabled"} />
+          </div>
+          ${(!unlocked ? `<div class="hint" style="margin-top:10px;color:#7c2d12;">${lockHint}</div>` : "")}
+        `;
+
+        container.appendChild(row);
+
+        const rng = row.querySelector(`#${rngId}`);
+        const num = row.querySelector(`#${numId}`);
+        const pct = row.querySelector(`#${pctId}`);
+
+        function applyValue(raw) {
+          if (!unlocked) return;
+
+          const parsed = Number(raw);
+          const safe = clamp(Number.isFinite(parsed) ? parsed : 0, 0, 100);
+
+          progressStore.set(key, safe);
+
+          pct.textContent = `${Math.round(safe)}%`;
+          rng.value = safe;
+          num.value = safe;
+
+          updateHeaderScore();
+          updateStepIndicators();
+
+          // Yangi: keyingi harakatlarni ochish shartini tekshirish
+          const currentStep = gameData.currentStep;
+          const currentSubIndex = index; // bu forEach ichidagi index
+
+          // Agar hozirgi harakat >= 76% bo'lsa — keyingi harakat ochilishi mumkin
+          if (safe >= PASS_GATE) {
+            // Keyingi sub-action borligini va yopiq bo'lganini tekshirib, qayta render qilamiz
+            if (currentSubIndex + 1 < currentStepData.subActions.length) {
+              // Faqat shu holatda butun kichik harakatlarni qayta chizamiz
+              renderSubActions();
+              setLockNote(""); // lock eslatmasini tozalaymiz
+            }
+          } else {
+            setLockNote(`Eslatma: ${index + 1}-kichik harakat ${PASS_GATE}% dan past (${Math.round(safe)}%). Keyingi harakat(lar) yopiq qoladi.`);
+          }
+
+          // Bosqich o'rtachasi PASS_GATE dan oshsa — asosiy kartalarni yangilaymiz
+          const stepAvg = computeStepAvg(currentStep);
+          if (stepAvg >= PASS_GATE) {
+            renderMainActions();
+          }
+        }
+
+        if (rng) rng.addEventListener("input", (e) => applyValue(e.target.value));
+        if (num) num.addEventListener("input", (e) => applyValue(e.target.value));
+        if (num) num.addEventListener("blur", (e) => applyValue(e.target.value));
+      });
+    }
+
+    function wireStepClicks() {
+      document.querySelectorAll(".step").forEach(el => {
+        el.addEventListener("click", () => {
+          const stepId = Number(el.dataset.step);
+          const unlocked = isStepUnlocked(stepId);
+          if (!unlocked) {
+            setLockNote(`${stepId}-bosqich yopiq. Avval ${stepId - 1}-bosqich o‘rtachasini ${PASS_GATE}% ga yetkazing.`);
+            return;
+          }
+          setLockNote("");
+          gameData.currentStep = stepId;
+          updateStepIndicators();
+          renderMainActions();
+          renderSubActions();
+          updateHeaderScore();
+        });
+      });
+    }
+
+    function openReport() {
+      const { totalCount, filledCount, finalScore } = computeTotals();
+      document.getElementById("finalScore").textContent = `${Math.round(finalScore)} / 100`;
+      document.getElementById("finalFilled").textContent = filledCount;
+      document.getElementById("finalTotal").textContent = totalCount;
+      document.getElementById("finalPercent").textContent = `${Math.round(finalScore)}%`;
+      document.getElementById("completionModal").classList.add("show");
+    }
+
+    function closeReport() {
+      document.getElementById("completionModal").classList.remove("show");
+    }
+
+    function restartAll() {
+      progressStore.clear();
+      gameData.currentStep = 1;
+      setLockNote("");
+      updateStepIndicators();
+      renderMainActions();
+      renderSubActions();
+      updateHeaderScore();
+      closeReport();
+    }
+
+    document.getElementById("finishBtn").addEventListener("click", openReport);
+    document.getElementById("restartBtn").addEventListener("click", restartAll);
+    document.getElementById("restartBtn2").addEventListener("click", restartAll);
+    document.getElementById("closeModalBtn").addEventListener("click", closeReport);
+    document.getElementById("completionModal").addEventListener("click", (e) => {
+      if (e.target.id === "completionModal") closeReport();
+    });
+
+    wireStepClicks();
+    updateStepIndicators();
+    renderMainActions();
+    renderSubActions();
+    updateHeaderScore();
+  </script>
+</body>
+</html>
