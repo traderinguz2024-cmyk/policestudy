@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Savollari - English for Lawyers</title>
+
+    <!-- base.css faylingizni ulang -->
+    <link rel="stylesheet" href="base.css">
+
+    <style>
+        /* Quiz sahifasi uchun maxsus stillar (sizning asosiy dizayningizga mos) */
+        .quiz-page {
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+
+        .quiz-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(37,99,235,0.1);
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .quiz-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .quiz-back-btn:hover {
+            color: #1d4ed8;
+        }
+
+        .quiz-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: #eff6ff;
+            padding: 0.5rem 1.25rem;
+            border-radius: 999px;
+            color: #2563eb;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 0.75rem;
+        }
+
+        .quiz-description {
+            font-size: 1.2rem;
+            color: #475569;
+        }
+
+        .progress-container {
+            margin: 2rem 0;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #3b82f6, #2563eb);
+            transition: width 0.4s ease;
+        }
+
+        .question-card {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .question-number {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+        }
+
+        .choices-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .choice-option {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .choice-option:hover {
+            border-color: #a5d8ff;
+        }
+
+        .choice-option input {
+            margin-right: 1rem;
+        }
+
+        .choice-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .choice-letter {
+            width: 32px;
+            height: 32px;
+            background: #eff6ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .choice-text {
+            flex: 1;
+            font-size: 1.05rem;
+        }
+
+        .question-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .btn-prev, .btn-next, .btn-finish {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-prev {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .btn-next, .btn-finish {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-prev:hover { background: #e2e8f0; }
+        .btn-next:hover, .btn-finish:hover { background: #1d4ed8; }
+
+        .results-section {
+            text-align: center;
+        }
+
+        .results-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 3rem 2rem;
+            box-shadow: 0 10px 40px rgba(37,99,235,0.1);
+        }
+
+        .results-icon {
+            margin-bottom: 1.5rem;
+        }
+
+        .results-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .results-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #2563eb;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .results-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .btn-restart, .btn-home {
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-restart {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-home {
+            background: #f1f5f9;
+            color: #2563eb;
+        }
+
+        .btn-restart:hover { background: #1d4ed8; }
+        .btn-home:hover { background: #e2e8f0; }
+    </style>
+</head>
+<body>
+
+    <!-- Header (base.html dan nusxa) -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                </svg>
+                <span class="logo-text">English for Lawyers</span>
+            </div>
+
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link">Bosh sahifa</a>
+                <a href="presentations.html" class="nav-link">Kurslar</a>
+                <a href="haqida.html" class="nav-link">Haqida</a>
+            </nav>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-content">
+            <a href="index.html" class="mobile-nav-link">Bosh sahifa</a>
+            <a href="presentations.html" class="mobile-nav-link">Kurslar</a>
+            <a href="haqida.html" class="mobile-nav-link">Haqida</a>
+        </div>
+    </div>
+
+    <!-- Quiz sahifasi -->
+    <div class="quiz-page">
+        <div class="quiz-container">
+            <!-- Quiz Header -->
+            <div class="quiz-header">
+                <a href="index.html" class="quiz-back-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Bosh sahifa
+                </a>
+
+                <div class="quiz-info">
+                    <div class="quiz-badge">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        <span>Test Savollari</span>
+                    </div>
+                    <h1 class="quiz-title">Bilimingizni Sinab Ko'ring</h1>
+                    <p class="quiz-description">10 ta savol orqali o'z bilimingizni tekshiring</p>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-info">
+                    <span class="progress-text">Savol <span id="currentQuestion">1</span> / 10</span>
+                    <span class="progress-percentage" id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <!-- Quiz Content – statik misol savollar -->
+            <div class="quiz-content" id="quizContent">
+                <!-- Savol 1 -->
+                <div class="question-card" data-question="1" style="display: block;">
+                    <div class="question-number">Savol 1</div>
+                    <h2 class="question-text">What is the primary purpose of a contract in legal terms?</h2>
+
+                    <div class="choices-list">
+                        <label class="choice-option">
+                            <input type="radio" name="question_1" value="1" data-correct="false">
+                            <div class="choice-content">
+                                <span class="choice-letter">A</span>
+                                <span class="choice-text">To create friendship between parties</span>
+                                <span class="choice-indicator">
+                                    <svg class="choice-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    <svg class="choice-cross" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </span>
+                            </div>
+                        </label>
+
+                        <label class="choice-option">
+                            <input type="radio" name="question_1" value="2" data-correct="true">
+                            <div class="choice-content">
+                                <span class="choice-letter">B</span>
+                                <span class="choice-text">To legally bind parties to their promises</span>
+                                <span class="choice-indicator">
+                                    <svg class="choice-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    <svg class="choice-cross" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </span>
+                            </div>
+                        </label>
+
+                        <label class="choice-option">
+                            <input type="radio" name="question_1" value="3" data-correct="false">
+                            <div class="choice-content">
+                                <span class="choice-letter">C</span>
+                                <span class="choice-text">To avoid taxes</span>
+                                <span class="choice-indicator">
+                                    <svg class="choice-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    <svg class="choice-cross" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="question-actions">
+                        <button class="btn-next" onclick="nextQuestion()">
+                            Keyingi
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Savol 2 (misol) -->
+                <div class="question-card" data-question="2" style="display: none;">
+                    <div class="question-number">Savol 2</div>
+                    <h2 class="question-text">Which of the following is NOT an element of a valid contract?</h2>
+
+                    <div class="choices-list">
+                        <label class="choice-option">
+                            <input type="radio" name="question_2" value="1" data-correct="false">
+                            <div class="choice-content">
+                                <span class="choice-letter">A</span>
+                                <span class="choice-text">Offer</span>
+                                <span class="choice-indicator">
+                                    <svg class="choice-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    <svg class="choice-cross" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </span>
+                            </div>
+                        </label>
+
+                        <label class="choice-option">
+                            <input type="radio" name="question_2" value="2" data-correct="false">
+                            <div class="choice-content">
+                                <span class="choice-letter">B</span>
+                                <span class="choice-text">Acceptance</span>
+                                <span class="choice-indicator">
+                                    <svg class="choice-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    <svg class="choice-cross" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </span>
+                            </div>
+                        </label>
+
+                        <label class="choice-option">
+                            <input type="radio" name="question_2" value="3" data-correct="true">
+                            <div class="choice-content">
+                                <span class="choice-letter">C</span>
+                                <span class="choice-text">Weather conditions</span>
+                                <span class="choice-indicator">
+                                    <svg class="choice-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    <svg class="choice-cross" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="question-actions">
+                        <button class="btn-prev" onclick="previousQuestion()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="19" y1="12" x2="5" y2="12"></line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
+                            Orqaga
+                        </button>
+                        <button class="btn-finish" onclick="finishQuiz()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Yakunlash
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Natijalar bo'limi -->
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-card">
+                    <div class="results-icon" id="resultsIcon"></div>
+                    <h2 class="results-title" id="resultsTitle"></h2>
+                    <p class="results-message" id="resultsMessage"></p>
+
+                    <div class="results-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="correctCount">0</div>
+                            <div class="stat-label">To'g'ri</div>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="incorrectCount">0</div>
+                            <div class="stat-label">Noto'g'ri</div>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="scorePercent">0%</div>
+                            <div class="stat-label">Ball</div>
+                        </div>
+                    </div>
+
+                    <div class="results-actions">
+                        <button class="btn-restart" onclick="restartQuiz()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 4 23 10 17 10"></polyline>
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                            </svg>
+                            Qaytadan Boshlash
+                        </button>
+                        <a href="index.html" class="btn-home">Bosh Sahifa</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript – quiz logikasi (statik misol uchun moslashtirildi) -->
+    <script>
+        let currentQuestionIndex = 1;
+        const totalQuestions = 10;  // statik misol
+        let answers = {};
+
+        function updateProgress() {
+            const progress = (currentQuestionIndex / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex;
+            document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+        }
+
+        function nextQuestion() {
+            const currentCard = document.querySelector(`.question-card[data-question="${currentQuestionIndex}"]`);
+            const selected = currentCard.querySelector('input[type="radio"]:checked');
+
+            if (!selected) {
+                alert('Iltimos, javobni tanlang!');
+                return;
+            }
+
+            currentCard.style.display = 'none';
+            currentQuestionIndex++;
+
+            const nextCard = document.querySelector(`.question-card[data-question="${currentQuestionIndex}"]`);
+            if (nextCard) {
+                nextCard.style.display = 'block';
+                updateProgress();
+            }
+        }
+
+        function previousQuestion() {
+            const currentCard = document.querySelector(`.question-card[data-question="${currentQuestionIndex}"]`);
+            currentCard.style.display = 'none';
+            currentQuestionIndex--;
+
+            const prevCard = document.querySelector(`.question-card[data-question="${currentQuestionIndex}"]`);
+            if (prevCard) {
+                prevCard.style.display = 'block';
+                updateProgress();
+            }
+        }
+
+        function finishQuiz() {
+            const currentCard = document.querySelector(`.question-card[data-question="${currentQuestionIndex}"]`);
+            const selected = currentCard.querySelector('input[type="radio"]:checked');
+
+            if (!selected) {
+                alert('Iltimos, javobni tanlang!');
+                return;
+            }
+
+            // Natijalarni hisoblash (statik misol)
+            let correctCount = 2;  // misol uchun
+            let incorrectCount = 8;
+            const scorePercent = Math.round((correctCount / totalQuestions) * 100);
+
+            document.getElementById('quizContent').style.display = 'none';
+            document.getElementById('resultsSection').style.display = 'block';
+
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('incorrectCount').textContent = incorrectCount;
+            document.getElementById('scorePercent').textContent = scorePercent + '%';
+
+            const resultsIcon = document.getElementById('resultsIcon');
+            const resultsTitle = document.getElementById('resultsTitle');
+            const resultsMessage = document.getElementById('resultsMessage');
+
+            if (scorePercent >= 80) {
+                resultsIcon.innerHTML = `<svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>`;
+                resultsTitle.textContent = 'Ajoyib!';
+                resultsMessage.textContent = 'Siz a\'lo natija ko\'rsatdingiz!';
+            } else if (scorePercent >= 60) {
+                resultsIcon.innerHTML = `<svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+                resultsTitle.textContent = 'Yaxshi!';
+                resultsMessage.textContent = 'Yaxshi natija, lekin yanada yaxshiroq bo\'lishingiz mumkin!';
+            } else {
+                resultsIcon.innerHTML = `<svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>`;
+                resultsTitle.textContent = 'Ko\'proq O\'rganish Kerak';
+                resultsMessage.textContent = 'Tashvishlanmang! Qayta urinib ko\'ring va ko\'proq mashq qiling.';
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 1;
+            answers = {};
+
+            document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('quizContent').style.display = 'block';
+
+            document.querySelectorAll('.question-card').forEach((card, index) => {
+                card.style.display = index === 0 ? 'block' : 'none';
+            });
+
+            updateProgress();
+        }
+
+        // Boshlang'ich progress
+        updateProgress();
+    </script>
+</body>
+</html>
