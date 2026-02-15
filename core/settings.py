@@ -11,15 +11,11 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-<<<<<<< HEAD
-
-=======
 import os, dj_database_url
 import environ
 
 env = environ.Env()
 environ.Env.read_env()
->>>>>>> d7523c3 (first commit)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,11 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-<<<<<<< HEAD
+
 SECRET_KEY = 'django-insecure-ao9$wzou6%qskg$(mn&o1bspxi3l8u^hjmx(7$or4y@ws5cbc2'
-=======
+
 SECRET_KEY = env('SECRET_KEY')
->>>>>>> d7523c3 (first commit)
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -43,24 +39,17 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-<<<<<<< HEAD
-=======
     'jazzmin',
->>>>>>> d7523c3 (first commit)
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
-    'cyber',
-=======
     'english',
     'rest_framework',
     'api',
 
->>>>>>> d7523c3 (first commit)
 ]
 
 MIDDLEWARE = [
@@ -96,7 +85,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-<<<<<<< HEAD
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -105,7 +94,6 @@ DATABASES = {
 }
 
 
-=======
 import dj_database_url
 
 DATABASES = {
@@ -115,7 +103,7 @@ DATABASES = {
 
 
 
->>>>>>> d7523c3 (first commit)
+
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
@@ -151,8 +139,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-<<<<<<< HEAD
-=======
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -161,4 +148,4 @@ MEDIA_ROOT = BASE_DIR / 'media'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
->>>>>>> d7523c3 (first commit)
+
