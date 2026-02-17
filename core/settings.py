@@ -39,6 +39,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'cloudinary_storage',
+    'cloudinary',
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,6 +53,13 @@ INSTALLED_APPS = [
     'api',
 
 ]
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dkpry2gt4',
+    'API_KEY': '397555127961296',
+    'API_SECRET': 'KU7c9atCLnbP8tMGmoQT0WG-Pk0',
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
