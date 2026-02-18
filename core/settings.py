@@ -54,9 +54,9 @@ INSTALLED_APPS = [
 
 ]
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dkpry2gt4',
-    'API_KEY': '397555127961296',
-    'API_SECRET': 'KU7c9atCLnbP8tMGmoQT0WG-Pk0',
+    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': env('CLOUDINARY_API_KEY'),
+    'API_SECRET': env('CLOUDINARY_API_SECRET'),
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
@@ -108,19 +108,23 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 
 import dj_database_url
 
-DATABASES = {
-    'default': dj_database_url.parse(env('DATABASE_URL'))
-}
+# Database sozlamalari
+if not DEBUG:
+    # Render (Production) muhiti uchun
+    DATABASES = {
+        'default': dj_database_url.parse(env('DATABASE_URL'))
+    }
+else:
+    # Sizning kompyuteringiz (Local) uchun - SQLite ishlatadi
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': Path(BASE_DIR) / 'db.sqlite3',
+        }
+    }
 
 
 
