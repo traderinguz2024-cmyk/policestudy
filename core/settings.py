@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os, dj_database_url
 import environ
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 env = environ.Env()
 environ.Env.read_env()

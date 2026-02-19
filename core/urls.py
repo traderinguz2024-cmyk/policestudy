@@ -5,7 +5,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('english.urls')),  # Faqat english ilovasi uchun
+    path('', include('english.urls')),
+    path('api/', include('api.urls')),
 ]
 
 if settings.DEBUG:
