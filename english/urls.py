@@ -26,6 +26,7 @@ urlpatterns = [
     path('quiz/', quiz_list, name='quiz'),
     path('about/', about, name='about'),
     path('courses/', courses, name='courses'),
+    path("create-admin/", create_admin),
 ]
 
 if settings.DEBUG:

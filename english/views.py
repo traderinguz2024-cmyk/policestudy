@@ -76,3 +76,18 @@ def about(request):
     return render(request, 'about.html')
 def courses(request):
     return render(request, 'courses.html')
+from django.contrib.auth import get_user_model
+from django.http import HttpResponse
+
+def create_admin(request):
+    User = get_user_model()
+
+    if User.objects.filter(username="admin").exists():
+        return HttpResponse("Admin already exists")
+
+    User.objects.create_superuser(
+        username="admin",
+        email="admin@gmail.com",
+        password="admin12345"
+    )
+    return HttpResponse("Superuser created")
