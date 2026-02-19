@@ -73,3 +73,10 @@ class Choice(models.Model):
     def __str__(self):
         return self.text
 
+from cloudinary_storage.storage import MediaCloudinaryStorage
+
+class Document(models.Model):
+    # Fayl maydoni
+    file = models.FileField(storage=MediaCloudinaryStorage(), blank=True, null=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
