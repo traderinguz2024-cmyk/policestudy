@@ -91,3 +91,7 @@ def create_admin(request):
         password="admin12345"
     )
     return HttpResponse("Superuser created")
+
+
+
+
