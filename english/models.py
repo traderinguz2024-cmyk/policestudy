@@ -1,4 +1,5 @@
 from django.db import models
+from cloudinary.models import CloudinaryField
 
 
 # Create your models here.
@@ -12,7 +13,7 @@ class Author(models.Model):
 
 class PresentationsCategory(models.Model):
     title = models.CharField(max_length=100)
-    file = models.FileField(upload_to='materials/',null=True, blank=True)
+    file = CloudinaryField(resource_type="raw")
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -21,7 +22,7 @@ class PresentationsCategory(models.Model):
 
 class CaseStudyCategory(models.Model):
     title = models.CharField(max_length=100)
-    file = models.FileField(upload_to='materials/',null=True, blank=True)
+    file = CloudinaryField(resource_type="raw")
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -44,7 +45,7 @@ class ListeningCategory(models.Model):
 
 class IndependentWorkCategory(models.Model):
     title = models.CharField(max_length=100)
-    file = models.FileField(upload_to='materials/',null=True, blank=True)
+    file = CloudinaryField(resource_type="raw")
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -53,7 +54,7 @@ class IndependentWorkCategory(models.Model):
 
 class AssignmentsCategory(models.Model):
     title = models.CharField(max_length=100)
-    file = models.FileField(upload_to='materials/',null=True, blank=True)
+    file = CloudinaryField(resource_type="raw")
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
 
     def __str__(self):
