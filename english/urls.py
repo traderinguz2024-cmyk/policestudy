@@ -8,7 +8,9 @@ from .views import (
     assignments_list,
     quiz_list,
     about,
-    courses
+    courses,
+    create_admin,
+
 )
 
 from django.conf import settings
