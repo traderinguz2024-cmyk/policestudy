@@ -34,7 +34,9 @@ SECRET_KEY = env('SECRET_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+import os
+
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ['*']
 
@@ -115,7 +117,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 
-import os
+
 import dj_database_url
 
 DATABASES = {
