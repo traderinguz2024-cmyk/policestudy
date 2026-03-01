@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'english',
     'rest_framework',
     'api',
+    'hitcount',
 
 ]
 CLOUDINARY_STORAGE = {
