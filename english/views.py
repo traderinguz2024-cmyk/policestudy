@@ -4,7 +4,6 @@ from .models import (
     IndependentWorkCategory, AssignmentsCategory, Question, Author
 )
 import random
-from urllib.parse import quote, urlparse
 
 
 def build_course_cards():
@@ -95,21 +94,7 @@ def build_preview_url(file_field):
     if not file_field:
         return None
 
-    file_url = file_field.url
-    if file_url.startswith("/"):
-        return file_url
-
-    parsed_url = urlparse(file_url)
-    path = parsed_url.path.lower()
-
-    if path.endswith(".pdf"):
-        return file_url
-
-    office_extensions = (".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx")
-    if path.endswith(office_extensions):
-        return f"https://view.officeapps.live.com/op/view.aspx?src={quote(file_url, safe='')}"
-
-    return file_url
+    return file_field.url
 
 def homepage(request):
     presentations = PresentationsCategory.objects.all()
