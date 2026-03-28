@@ -1,24 +1,24 @@
 from pathlib import Path
 import os
 import dj_database_url
-import environ
 
-env = environ.Env()
 BASE_DIR = Path(__file__).resolve().parent.parent
-ENV_FILE = BASE_DIR / "core" / ".env"
-if ENV_FILE.exists():
-    environ.Env.read_env(ENV_FILE)
 
-SECRET_KEY = env("SECRET_KEY")
-DEBUG = env.bool("DEBUG", default=False)
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY",
+    "django-insecure-9ms+6p*!%wg!lbs&%2ud)(b_2iclhywwl%h5%8q*yi(b%@_h3",
+)
+DEBUG = os.environ.get("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
-if DEBUG:
+raw_allowed_hosts = os.environ.get("ALLOWED_HOSTS", "*").strip()
+if raw_allowed_hosts == "*" or DEBUG:
     ALLOWED_HOSTS = ["*"]
+else:
+    ALLOWED_HOSTS = [host.strip() for host in raw_allowed_hosts.split(",") if host.strip()]
 
-CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
+csrf_origins = os.environ.get("CSRF_TRUSTED_ORIGINS", "").strip()
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_origins.split(",") if origin.strip()]
 
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -62,8 +62,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "core.wsgi.application"
 
-USE_SQLITE = env.bool("USE_SQLITE", default=False)
-DATABASE_URL = env("DATABASE_URL", default="")
+USE_SQLITE = os.environ.get("USE_SQLITE", "True") == "True"
+DATABASE_URL = os.environ.get("DATABASE_URL", "")
 
 if USE_SQLITE or not DATABASE_URL:
     DATABASES = {
