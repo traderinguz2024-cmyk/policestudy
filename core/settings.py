@@ -19,6 +19,9 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
+if DEBUG:
+    ALLOWED_HOSTS = ["*"]
+
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
     for origin in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",")
