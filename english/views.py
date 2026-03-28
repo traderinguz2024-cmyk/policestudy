@@ -4,6 +4,7 @@ from .models import (
     IndependentWorkCategory, AssignmentsCategory, Question, Author
 )
 import random
+from urllib.parse import quote
 
 
 def build_course_cards():
@@ -89,6 +90,20 @@ def build_course_cards():
         },
     ]
 
+
+def build_preview_url(file_field):
+    if not file_field:
+        return None
+
+    file_url = file_field.url
+    lower_url = file_url.lower()
+    previewable_extensions = (".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx")
+
+    if any(extension in lower_url for extension in previewable_extensions):
+        return f"https://docs.google.com/gview?embedded=1&url={quote(file_url, safe='')}"
+
+    return file_url
+
 def homepage(request):
     presentations = PresentationsCategory.objects.all()
     casestudies = CaseStudyCategory.objects.all()
@@ -115,11 +130,15 @@ def homepage(request):
 
 def presentations_list(request):
     presentations = PresentationsCategory.objects.all()
+    for presentation in presentations:
+        presentation.preview_url = build_preview_url(presentation.file)
     return render(request, 'presentations_list.html', {'presentations': presentations})
 
 
 def casestudy_list(request):
     casestudies = CaseStudyCategory.objects.all()
+    for casestudy in casestudies:
+        casestudy.preview_url = build_preview_url(casestudy.file)
     return render(request, 'casestudy_list.html', {'casestudies': casestudies})
 
 
@@ -130,11 +149,15 @@ def listening_list(request):
 
 def independent_list(request):
     independents = IndependentWorkCategory.objects.all()
+    for independent in independents:
+        independent.preview_url = build_preview_url(independent.file)
     return render(request, 'independent_detail.html', {'independents': independents})
 
 
 def assignments_list(request):
     assignments = AssignmentsCategory.objects.all()
+    for assignment in assignments:
+        assignment.preview_url = build_preview_url(assignment.file)
     return render(request, 'assignments_list.html', {'assignments': assignments})
 
 

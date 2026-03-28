@@ -34,7 +34,7 @@
                 <p class="library-author">{{ casestudy.author }}</p>
                 <div class="library-footer">
                     {% if casestudy.file %}
-                        <a class="library-cta" href="{{ casestudy.file.url }}" target="_blank" rel="noopener">Ko'rish →</a>
+                        <a class="library-cta" href="{{ casestudy.preview_url }}" target="_blank" rel="noopener">Ko'rish →</a>
                     {% else %}
                         <span class="library-author">Fayl yuklanmagan</span>
                     {% endif %}

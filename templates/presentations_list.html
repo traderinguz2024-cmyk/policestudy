@@ -24,7 +24,7 @@
     <div class="library-grid">
         {% for presentation in presentations %}
             {% if presentation.file %}
-                <a class="library-link" href="{{ presentation.file.url }}" target="_blank" rel="noopener">
+                <a class="library-link" href="{{ presentation.preview_url }}" target="_blank" rel="noopener">
                     <article class="library-card">
                         <div class="library-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
