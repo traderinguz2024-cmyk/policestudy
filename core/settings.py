@@ -13,11 +13,15 @@ SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
-    if host.strip()
-]
+raw_allowed_hosts = os.environ.get("ALLOWED_HOSTS", "*").strip()
+if raw_allowed_hosts == "*":
+    ALLOWED_HOSTS = ["*"]
+else:
+    ALLOWED_HOSTS = [
+        host.strip()
+        for host in raw_allowed_hosts.split(",")
+        if host.strip()
+    ]
 
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
