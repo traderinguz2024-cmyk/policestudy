@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.shortcuts import render
 from .models import (
     PresentationsCategory, CaseStudyCategory, ListeningCategory,
@@ -95,15 +94,6 @@ def build_preview_url(file_field):
     if not file_field:
         return None
 
-    file_name = getattr(file_field, "name", "") or ""
-    if file_name.startswith(("http://", "https://")):
-        return file_name
-
-    if "/upload/" in file_name:
-        cloud_name = getattr(settings, "CLOUDINARY_CLOUD_NAME", "")
-        if cloud_name:
-            return f"https://res.cloudinary.com/{cloud_name}/{file_name.lstrip('/')}"
-
     return file_field.url
 
 def homepage(request):
@@ -186,21 +176,6 @@ def about(request):
     return render(request, 'about.html')
 def courses(request):
     return render(request, 'courses.html', {'course_cards': build_course_cards()})
-from django.contrib.auth import get_user_model
-from django.http import HttpResponse
-
-def create_admin(request):
-    User = get_user_model()
-
-    if User.objects.filter(username="admin").exists():
-        return HttpResponse("Admin already exists")
-
-    User.objects.create_superuser(
-        username="admin",
-        email="admin@gmail.com",
-        password="admin12345"
-    )
-    return HttpResponse("Superuser created")
 
 
 

@@ -9,8 +9,6 @@ from .views import (
     quiz_list,
     about,
     courses,
-    create_admin,
-
 )
 
 from django.conf import settings
@@ -28,8 +26,7 @@ urlpatterns = [
     path('quiz/', quiz_list, name='quiz'),
     path('about/', about, name='about'),
     path('courses/', courses, name='courses'),
-    path("create-admin/", create_admin),
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
