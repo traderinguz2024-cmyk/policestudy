@@ -4,7 +4,7 @@ from .models import (
     IndependentWorkCategory, AssignmentsCategory, Question, Author
 )
 import random
-from urllib.parse import quote
+from urllib.parse import quote, urlparse
 
 
 def build_course_cards():
@@ -99,11 +99,15 @@ def build_preview_url(file_field):
     if file_url.startswith("/"):
         return file_url
 
-    lower_url = file_url.lower()
-    previewable_extensions = (".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx")
+    parsed_url = urlparse(file_url)
+    path = parsed_url.path.lower()
 
-    if any(extension in lower_url for extension in previewable_extensions):
-        return f"https://docs.google.com/gview?embedded=1&url={quote(file_url, safe='')}"
+    if path.endswith(".pdf"):
+        return file_url
+
+    office_extensions = (".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx")
+    if path.endswith(office_extensions):
+        return f"https://view.officeapps.live.com/op/view.aspx?src={quote(file_url, safe='')}"
 
     return file_url
 
