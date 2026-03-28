@@ -96,6 +96,9 @@ def build_preview_url(file_field):
         return None
 
     file_url = file_field.url
+    if file_url.startswith("/"):
+        return file_url
+
     lower_url = file_url.lower()
     previewable_extensions = (".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx")
 

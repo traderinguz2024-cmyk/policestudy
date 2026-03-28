@@ -13,9 +13,6 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os, dj_database_url
 import environ
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
 
 env = environ.Env()
 environ.Env.read_env()
@@ -78,28 +75,42 @@ INSTALLED_APPS = [
     'hitcount',
 
 ]
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': env('CLOUDINARY_API_KEY'),
-    'API_SECRET': env('CLOUDINARY_API_SECRET'),
-    'RESOURCE_TYPE': 'auto',
-    'UPLOAD_PRESET': "123456"
-}
+CLOUDINARY_CLOUD_NAME = env("CLOUDINARY_CLOUD_NAME", default="")
+CLOUDINARY_API_KEY = env("CLOUDINARY_API_KEY", default="")
+CLOUDINARY_API_SECRET = env("CLOUDINARY_API_SECRET", default="")
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
+USE_CLOUDINARY_STORAGE = all([
+    CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET,
+])
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': CLOUDINARY_CLOUD_NAME,
+    'API_KEY': CLOUDINARY_API_KEY,
+    'API_SECRET': CLOUDINARY_API_SECRET,
+    'RESOURCE_TYPE': 'auto',
+}
 
 # Django 4.2+ va 6.0 uchun yangi format
-STORAGES = {
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-    },
-}
-
-# Eski versiyalar bilan moslik uchun (Cloudinary kutubxonasi qidirayotgan narsa)
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+if USE_CLOUDINARY_STORAGE:
+    STORAGES = {
+        "default": {
+            "BACKEND": "cloudinary_storage.storage.RawMediaCloudinaryStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -194,9 +205,10 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 MEDIA_URL = '/media/'
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+MEDIA_ROOT = BASE_DIR / "media"
 
 # settings.py
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -1,6 +1,4 @@
 from django.db import models
-from cloudinary.models import CloudinaryField
-from cloudinary_storage.storage import MediaCloudinaryStorage
 
 class Author(models.Model):
     first_name = models.CharField(max_length=100)
@@ -13,7 +11,7 @@ class Author(models.Model):
 # resource_type='auto' va flags='attachment' (ixtiyoriy) yuklashni osonlashtiradi
 class PresentationsCategory(models.Model):
     title = models.CharField(max_length=100)
-    file = CloudinaryField('file', resource_type="auto", blank=True, null=True)
+    file = models.FileField(upload_to="materials/", blank=True, null=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -21,25 +19,23 @@ class PresentationsCategory(models.Model):
 
 class CaseStudyCategory(models.Model):
     title = models.CharField(max_length=100)
-    file = CloudinaryField('file', resource_type="auto", blank=True, null=True)
+    file = models.FileField(upload_to="materials/", blank=True, null=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
 
 class IndependentWorkCategory(models.Model):
     title = models.CharField(max_length=100)
-    file = CloudinaryField('file', resource_type="auto", blank=True, null=True)
+    file = models.FileField(upload_to="materials/", blank=True, null=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
 
 class AssignmentsCategory(models.Model):
     title = models.CharField(max_length=100)
-    file = CloudinaryField('file', resource_type="auto", blank=True, null=True)
+    file = models.FileField(upload_to="materials/", blank=True, null=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
 
 class ListeningCategory(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    # Audio uchun resource_type="video" Cloudinary-da audio/video uchun standart hisoblanadi
-    # Agar "auto" xato bersa, "video" deb yozish ham yechim bo'ladi
-    audio = CloudinaryField('audio', resource_type="auto", blank=True, null=True)
+    audio = models.FileField(upload_to="listening/", blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -56,6 +52,5 @@ class Choice(models.Model):
     is_correct = models.BooleanField(default=False)
 
 class Document(models.Model):
-    # Bu yerda storage ishlatsangiz, settings.py dagi sozlamalar bilan mos tushishi kerak
-    file = models.FileField(storage=MediaCloudinaryStorage(), blank=True, null=True)
+    file = models.FileField(upload_to="documents/", blank=True, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
