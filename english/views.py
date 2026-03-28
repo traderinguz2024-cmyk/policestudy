@@ -5,6 +5,90 @@ from .models import (
 )
 import random
 
+
+def build_course_cards():
+    presentations_count = PresentationsCategory.objects.count()
+    casestudy_count = CaseStudyCategory.objects.count()
+    listening_count = ListeningCategory.objects.count()
+    independent_count = IndependentWorkCategory.objects.count()
+    assignments_count = AssignmentsCategory.objects.count()
+    questions_count = Question.objects.count()
+
+    return [
+        {
+            "title": "Presentations",
+            "description": "Professional taqdimot ko'nikmalarini rivojlantirish uchun materiallar.",
+            "count": presentations_count,
+            "count_label": "ta fayl",
+            "category": "video",
+            "duration": "~2 soat",
+            "difficulty": "Beginner",
+            "badge": "Video",
+            "url_name": "presentations",
+            "icon": "presentation",
+        },
+        {
+            "title": "Case Study",
+            "description": "Real huquqiy vaziyatlar asosida fikrlash va tahlil qilish mashqlari.",
+            "count": casestudy_count,
+            "count_label": "ta fayl",
+            "category": "reading",
+            "duration": "~3 soat",
+            "difficulty": "Intermediate",
+            "badge": "O'qish",
+            "url_name": "casestudy",
+            "icon": "case-study",
+        },
+        {
+            "title": "Listening",
+            "description": "Audio darslar va tinglab tushunishni kuchaytiradigan materiallar.",
+            "count": listening_count,
+            "count_label": "ta audio",
+            "category": "audio",
+            "duration": "~1 soat",
+            "difficulty": "Beginner",
+            "badge": "Audio",
+            "url_name": "listening",
+            "icon": "listening",
+        },
+        {
+            "title": "Independent Work",
+            "description": "Mustaqil tayyorgarlik uchun tuzilgan topshiriq va nazorat materiallari.",
+            "count": independent_count,
+            "count_label": "ta fayl",
+            "category": "reading",
+            "duration": "~4 soat",
+            "difficulty": "Intermediate",
+            "badge": "O'qish",
+            "url_name": "independent",
+            "icon": "book",
+        },
+        {
+            "title": "Assignments",
+            "description": "Amaliy topshiriqlar orqali mavzularni mustahkamlash uchun bo'lim.",
+            "count": assignments_count,
+            "count_label": "ta fayl",
+            "category": "reading",
+            "duration": "~2 soat",
+            "difficulty": "Advanced",
+            "badge": "Amaliyot",
+            "url_name": "assignments",
+            "icon": "assignment",
+        },
+        {
+            "title": "Quiz Tests",
+            "description": "Bilimingizni tekshirish va natijani darhol ko'rish uchun testlar.",
+            "count": questions_count,
+            "count_label": "ta savol",
+            "category": "reading",
+            "duration": "~1 soat",
+            "difficulty": "Advanced",
+            "badge": "Test",
+            "url_name": "quiz",
+            "icon": "quiz",
+        },
+    ]
+
 def homepage(request):
     presentations = PresentationsCategory.objects.all()
     casestudies = CaseStudyCategory.objects.all()
@@ -24,6 +108,7 @@ def homepage(request):
         'authors_count': authors.count(),
         'total_videos': presentations.count() + casestudies.count() + independents.count() + assignments.count(),
         'total_audios': listenings.count(),
+        'course_cards': build_course_cards(),
     }
     return render(request, 'home.html', context)
 
@@ -75,7 +160,7 @@ def quiz_list(request):
 def about(request):
     return render(request, 'about.html')
 def courses(request):
-    return render(request, 'courses.html')
+    return render(request, 'courses.html', {'course_cards': build_course_cards()})
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 

@@ -513,14 +513,13 @@
                     <label class="choice-item">
                         <input type="radio" name="q{{ question.id }}" value="{{ choice.id }}" data-correct="{{ choice.is_correct }}">
                         <div class="choice-box">
-                            {% if forloop.counter == 1 %}A
-                            {% elif forloop.counter == 2 %}B
-                            {% elif forloop.counter == 3 %}C
-                            {% elif forloop.counter == 4 %}D
-                            {% endif %}
-
-
-
+                            <span class="choice-letter">
+                                {% if forloop.counter == 1 %}A
+                                {% elif forloop.counter == 2 %}B
+                                {% elif forloop.counter == 3 %}C
+                                {% elif forloop.counter == 4 %}D
+                                {% endif %}
+                            </span>
                             <span class="choice-text">{{ choice.text }}</span>
                             <span class="choice-check">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
